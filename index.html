@@ -1,0 +1,159 @@
+<html>
+    <head>
+        <link rel = "stylesheet" type="text/css" href="./template.css">
+    </head>
+
+<body>
+    <div class="pBack"></div>
+    <header class="pHeader">
+        <div class="headerContent" id="logoFrame"></div>
+        <h1 class = "headerContent" id="headerText">
+            Hearing Test Converter
+        </h1>
+    </header>
+    <!--
+    <div class="chDrawer">
+            <ul>
+                <li>
+                    <a href="./AzbioCncchart.php">See Azbio/Cnc Chart</a>
+                </li>
+                <li>
+                    <a href="./azbkbChart.php">See Azbio/Bkb Chart</a>
+                </li>
+                <li>
+                    <a href="./CncBkbchart.php">See Bkb/Cnc Chart</a>
+                </li>
+            </ul>
+        </div>
+    -->
+    <div class="mForm">
+        <div class="formContent">
+            <form method="Post" action="./convertor.php" onsubmit="return checkInput()">
+                <p>Please select your input test type:</p>
+                <select name="Input" id="Input" oninput="checkSelect()">
+                    <option value="Azbio">Azbio</option>
+                    <option value="Cnc">Cnc</option>
+                    <option value="Bkb">Bkb</option>
+                </select>
+                <hr>
+                <br>
+                <label for="ScoreOne" id="LabelScoreOne">Enter Azbio Score:</label>
+                <br>
+                <input class="inputs" name="ScoreOne" id="ScoreOne" type="number" required>
+                <br>
+                <label for="ScoreTwo" id="LabelScoreTwo" style="display:none">Enter Cnc Words Correct:</label>
+                <br>
+                <input class="inputs" name="ScoreTwo" id="ScoreTwo" type="number" style="display:none">
+                <br>
+                <hr>
+                <p>Please select your output test type:</p>
+                <select name="Output" id="Output">
+                    <option value="Azbio">Azbio</option>
+                    <option value="Cnc">Cnc</option>
+                    <option value="Bkb">Bkb</option>
+                </select>
+                <br>
+                <button id = "bSubmit" type="submit" value="submit" > Submit</button>
+            </form>
+            <h4 id="Error" style="display:none"></h4>
+        </div>
+    </div>
+    <footer></footer>
+</body>
+</html>
+
+<script>
+function checkSelect() {
+  var element = document.getElementById("Input");
+  if(element.value=="Cnc")
+  {
+    document.getElementById("ScoreTwo").style.display="inline"; 
+    document.getElementById("LabelScoreTwo").style.display="inline";
+    document.getElementById("LabelScoreOne").innerText="Enter Cnc Phonemes Correct:";
+  }
+  else if(element.value=="Azbio"){
+    document.getElementById("ScoreTwo").style.display="none";
+    document.getElementById("LabelScoreTwo").style.display="none";
+    document.getElementById("LabelScoreOne").innerText="Enter Azbio Score:";
+  }
+  else{
+    document.getElementById("ScoreTwo").style.display="none";
+    document.getElementById("LabelScoreTwo").style.display="none";
+    document.getElementById("LabelScoreOne").innerText="Enter Bkb Score:";
+  }
+//   element.classList.toggle("mystyle");
+}
+
+function checkInput(){
+
+    var input = document.getElementById("Input");
+    var score1=document.getElementById("ScoreOne");
+    var score2=document.getElementById("ScoreTwo");
+    var output = document.getElementById("Output");
+    
+  
+    if(input.value==output.value)
+    {
+        document.getElementById("Error").style.display="inline";
+        document.getElementById("Error").innerText="Can't convert to the same test.";
+        return false;
+    }
+    else if(input.value=="Azbio")
+    {
+        if(document.getElementById("ScoreOne").value<0 || document.getElementById("ScoreOne").value>100)
+        {
+            document.getElementById("Error").style.display="inline";
+            document.getElementById("Error").innerText="Azbio can only score between 0 - 100";
+            return false;
+        }
+        else{
+        // document.getElementById("Error").style.display="inline";
+        // document.getElementById("Error").innerText="Good Job";
+        // this will need to return true when time
+        return true;
+        }
+    }
+    else if(input.value=="Bkb")
+    {
+        if(document.getElementById("ScoreOne").value<-23.5 || document.getElementById("ScoreOne").value>23.5)
+        {
+            document.getElementById("Error").style.display="inline";
+            document.getElementById("Error").innerText="Bkb can only score between -23.5 - 23.5";
+            return false;
+        }
+        else{
+        // document.getElementById("Error").style.display="inline";
+        // document.getElementById("Error").innerText="Good Job";
+        // this will need to return true when time
+        return true;
+        }
+    }
+    else
+    {
+        Phonemes=parseInt(document.getElementById("ScoreOne").value);
+        Words=parseInt(document.getElementById("ScoreTwo").value);
+        // console.log(Words);
+        // console.log(Phonemes);
+        if((Phonemes==NaN || Phonemes=="") && (Words==NaN ||Words==""))
+        {
+            document.getElementById("Error").style.display="inline";
+            document.getElementById("Error").innerText="Enter a valid set of Cnc scores";
+            return false;
+        }
+        else if(Phonemes<0 || Phonemes>150 || Words<0 || Words>50
+             ||Phonemes<Words*3 || Phonemes>(Words*3+(50-Words)*2))
+        {
+            // console.log("Yes");
+            document.getElementById("Error").style.display="inline";
+            document.getElementById("Error").innerText="Cnc scores do not work";
+            return false;
+        }
+        else{
+        // document.getElementById("Error").style.display="inline";
+        // document.getElementById("Error").innerText="Good Job";
+        // this will need to return true when time
+        return true;
+        }
+    }
+}
+</script>
